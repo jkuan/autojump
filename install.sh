@@ -40,13 +40,20 @@ done
 
 echo "Installing to ${prefix} ..."
 
+# add git revision to autojump
+gitrevision=`git rev-parse HEAD`
+if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]]; then
+    gitrevision=$gitrevision"-dirty"
+fi
+sed -e "s/AUTOJUMP_VERSION_UNDEFINED/git revision $gitrevision/" autojump > autojump-version
+
 # INSTALL AUTOJUMP
 sudo mkdir -p ${prefix}/share/autojump/
 sudo mkdir -p ${prefix}/bin/
 sudo mkdir -p ${prefix}/share/man/man1/
 sudo cp icon.png ${prefix}/share/autojump/
 sudo cp jumpapplet ${prefix}/bin/
-sudo cp autojump ${prefix}/bin/
+sudo cp autojump-version ${prefix}/bin/autojump
 sudo cp autojump.1 ${prefix}/share/man/man1/
 
 if [ -d "/etc/profile.d" ]; then
