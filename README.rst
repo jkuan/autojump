@@ -101,6 +101,9 @@ If the script fails, you may need to do::
 
 before the first step. 
 
+The minimum version of Python required is 2.6. To check your python version::
+
+ python --version
 
 Manual installation of autojump is very simple: copy
 
