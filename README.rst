@@ -126,9 +126,13 @@ Tanguy Ortolo packaged autojump for Debian testing/unstable. It will eventually 
 
  apt-get install autojump
  
-Autojump is also available on the OSX Homebrew package manager::
+Autojump is available on the OSX Homebrew package manager::
 
  brew install autojump
+
+Autojump is also available on Macports for OSX::
+
+ port install autojump
 
 I would be very interested by packages for other distros. If you think you can help me with the packaging, please contact me!
 
