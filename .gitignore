@@ -1,5 +1,6 @@
-tags
+.coverage
 *.pyc
 *~
 *.tar.gz
 *.patch
+tags

@@ -1,165 +1,148 @@
-% autojump(1) release-v20
-% 
-% 10 April 2012
-
-## NAME
+NAME
+----
 
 autojump - a faster way to navigate your filesystem
 
-## SYNOPSIS
-
-Jump to a previously visited directory 'foobar':
-
-    j foo
-
-Show all database entries and their respective key weights:
-
-    jumpstat
-
-## DESCRIPTION
+DESCRIPTION
+-----------
 
 autojump is a faster way to navigate your filesystem. It works by
 maintaining a database of the directories you use the most from the
-command line. The jumpstat command shows you the current contents of the
-database. Directories must be visited first before they can be jumped
-to.
+command line.
 
-## OPTIONS
+*Directories must be visited first before they can be jumped to.*
 
-Options must be passed to 'autojump' and not the 'j' wrapper function.
+USAGE
+-----
 
-    -a, --add DIR       manually add path to database
+`j` is a convenience wrapper function around `autojump`. Any option that
+can be used with `autojump` can be used with `j` and vice versa.
 
-    --stat              show database entries and their key weights
+-   Jump To A Directory That Contains `foo`:
 
-    --version           show version information and exit
+        j foo
 
-## INTERNAL OPTIONS
+-   Jump To A Child Directory
 
-    -b, --bash          enclose directory with quotes to prevent errors
+    Sometimes it's convenient to jump to a child directory
+    (sub-directory of current directory) rather than typing out the full
+    name.
 
-    --completion        prevent key weight decay over time
+        jc bar
 
-## ADVANCED USAGE
+-   Open File Manager To Directories (instead of jumping):
 
--   Prefer Symbolic Links
+    Instead of jumping to a directory, you can open a file explorer
+    window (Mac Finder, Windows Explorer, GNOME Nautilus, etc.) to the
+    directory instead.
 
-    Default behavior is to evaluate symbolic links into full paths as to
-    reduce duplicate entries in the database. However, some users prefer
-    a shorter working directory path in their shell prompt. To switch
-    behavior to prefer symbolic links, export the following
-    configuration in your \~/.bashrc:
+        jo music
 
-        export AUTOJUMP_KEEP_SYMLINKS=1
+    Opening a file manager to a child directory is also supported.
 
--   Change Directory Weight
+        jco images
 
-    To manually change a directory's key weight, you can edit the file
-    *$XDG\_DATA\_HOME/autojump/autojump.txt*. Each entry has two
-    columns. The first is the key weight and the second is the path:
+-   Using Multiple Arguments:
 
-        29.3383211216   /home/user/downloads
+    Let's assume the following database:
 
-    All negative key weights are purged automatically.
+        30   /home/user/mail/inbox
+        10   /home/user/work/inbox
 
-## FILES
+    `j in` would jump into /home/user/mail/inbox as the higher weighted
+    entry. However you can pass multiple arguments to autojump to prefer
+    a different entry. In the above example, `j w in` would then change
+    directory to /home/user/work/inbox.
 
-If installed locally, autojump is self-contained in *\~/.autojump/*.
+For more options refer to help:
 
-The database is stored in *$XDG\_DATA\_HOME/autojump/autojump.txt*.
+    autojump --help
 
-## REPORTING BUGS
-
-For any issues please visit the following URL:
-
-*https://github.com/joelthelion/autojump/issues*
-
-## THANKS
-
-Special thanks goes out to: Pierre Gueth, Simon Marache-Francisco,
-Daniel Jackoway, and many others.
-
-## AUTHORS
-
-autojump was originally written by Joël Schaerer, and currently
-maintained by William Ting.
-
-## COPYRIGHT
-
-Copyright © 2012 Free Software Foundation, Inc. License GPLv3+: GNU GPL
-version 3 or later <http://gnu.org/licenses/gpl.html>. This is free
-software: you are free to change and redistribute it. There is NO
-WARRANTY, to the extent permitted by law.
-
-## INSTALLATION
+INSTALLATION
+------------
 
 ### REQUIREMENTS
 
-Python v2.7+ or 3.2+
+-   Python v2.6+
+-   Bash v4.0+, zsh, fish, or clink (Windows)
 
-Bash v4.0+ for tab completion
+### AUTOMATIC
 
-### AUTOMATIC INSTALLATION
-
-**Linux**
+#### Linux
 
 autojump is included in the following distro repositories, please use
 relevant package management utilities to install (e.g. yum, apt-get,
 etc):
 
-    - Debian testing/unstable, Ubuntu, Linux Mint
+-   Debian testing/unstable, Ubuntu, Linux Mint
 
-    On Debian only, autojump requires manual activation for policy reasons. Please see ``/usr/share/doc/autojump/README.Debian``.
+    All Debian-derived distros require manual activation for policy
+    reasons, please see `/usr/share/doc/autojump/README.Debian`.
 
-    - RedHat, Fedora, CentOS
-    - ArchLinux
-    - Gentoo
-    - Frugalware
-    - Slackware
+-   RedHat, Fedora, CentOS
+-   ArchLinux
+-   Gentoo
+-   Frugalware
+-   Slackware
 
-**Mac**
+#### OS X
 
-Homebrew is the recommended installation method for Mac OS X::
+Homebrew is the recommended installation method for Mac OS X:
 
     brew install autojump
 
-A MacPorts installation method is also
-[available](https://trac.macports.org/browser/trunk/dports/sysutils/autojump/Portfile).
+MacPorts also available:
 
-**Other**
+    port install autojump
 
-Please check the [Wiki](https://github.com/joelthelion/autojump/wiki)
-for an up to date listing of installation methods.
+Windows
+-------
 
-### MANUAL INSTALLATION
+Windows support is enabled by [clink](https://code.google.com/p/clink/)
+which should be installed prior to installing autojump.
 
-Grab a copy of autojump::
-
-    git clone git://github.com/joelthelion/autojump.git
-
-Run the installation script::
-
-    cd autojump
-    ./install.sh [ --local ] [ --zsh ]
-
-and follow on screen instructions.
-
-### MANUAL UNINSTALLATION
-
-It is recommended to use your distribution's relevant package management
-utilities, unless you installed manually or ran into uninstallation
-issues.
+### MANUAL
 
 Grab a copy of autojump:
 
     git clone git://github.com/joelthelion/autojump.git
 
-Run the uninstallation script:
+Run the installation script and follow on screen instructions.
 
     cd autojump
-    ./uninstall.sh
+    ./install.py or ./uinstall.py
 
-and follow on screen instructions.
+KNOWN ISSUES
+------------
 
-If you keep getting `autojump: command not found` at the prompt,
-do:`unset PROMPT_COMMAND`. You can also restart your shell.
+-   autojump does not support directories that begin with `-`.
+
+-   For bash users, autojump keeps track of directories by modifying
+    `$PROMPT_COMMAND`. Do not overwrite `$PROMPT_COMMAND`:
+
+        export PROMPT_COMMAND="history -a"
+
+    Instead append to the end of the existing $PROMPT\_COMMAND:
+
+        export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} history -a"
+
+REPORTING BUGS
+--------------
+
+For any questions or issues please visit:
+
+    https://github.com/joelthelion/autojump/issues
+
+AUTHORS
+-------
+
+autojump was originally written by Joël Schaerer, and currently
+maintained by William Ting. More contributors can be found in `AUTHORS`.
+
+COPYRIGHT
+---------
+
+Copyright © 2012 Free Software Foundation, Inc. License GPLv3+: GNU GPL
+version 3 or later <http://gnu.org/licenses/gpl.html>. This is free
+software: you are free to change and redistribute it. There is NO
+WARRANTY, to the extent permitted by law.
